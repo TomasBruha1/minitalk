@@ -6,7 +6,7 @@
 /*   By: tbruha <tbruha@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 15:42:35 by tbruha            #+#    #+#             */
-/*   Updated: 2024/11/27 17:31:05 by tbruha           ###   ########.fr       */
+/*   Updated: 2024/11/29 11:34:21 by tbruha           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@
 
 void	own_handler(int signum)
 {
-	printf("\n\nReceived signal %d.\n", signum);
-	printf("Exiting with status 0.\n");
+	printf("\nReceived signal number %d.\n", signum);
+	printf("Exiting with peace on my mind (aka status 0).\n");
 	exit(0);
 }
 
@@ -36,8 +36,8 @@ int	main(void)
 	
 	server_pid = getpid();
 	signal(SIGINT, own_handler);
-	printf("Server PID: %d\n", server_pid);
-	fflush(stdout);
+	printf("Running... press CTRL + C to quit. Btw server PID is %d.\n", server_pid);
+//	fflush(stdout);
 	while (1)
 		pause();
 	return (0);
@@ -67,7 +67,6 @@ int	main(void)
 // My other info:
 // message "Hello" will be turned to ASCII. H -> 72 -> 01001000, e -> 101 -> 01100101 etc.
 // last one for NULL byte??
-// 
 
 // MANDATORY PART:
 // server first, it will print its PID
