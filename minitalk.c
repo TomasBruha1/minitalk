@@ -6,14 +6,13 @@
 /*   By: tbruha <tbruha@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 15:42:35 by tbruha            #+#    #+#             */
-/*   Updated: 2024/11/29 11:34:21 by tbruha           ###   ########.fr       */
+/*   Updated: 2024/12/03 14:54:14 by tbruha           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
 // What is next: 
-// Create notes from gitbook about functions.
 
 // create minitalk's Makefile
 // During that I will set up that for each writen letter I will convert it to ascii
@@ -32,12 +31,19 @@ void	own_handler(int signum)
 
 int	main(void)
 {
-	pid_t	server_pid;
+	pid_t				server_pid;
+	sigset_t			set_a;
+	struct sigaction 	sa;
 	
+	sa.sa_handler = own_handler;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = 0;
+		
 	server_pid = getpid();
-	signal(SIGINT, own_handler);
-	printf("Running... press CTRL + C to quit. Btw server PID is %d.\n", server_pid);
-//	fflush(stdout);
+	sigaction(SIGINT, &sa, NULL);
+	// signal(SIGINT, own_handler);
+	printf("Running... press CTRL + C to quit. Btw server PID is %d\n.", server_pid);
+	fflush(stdout);
 	while (1)
 		pause();
 	return (0);
@@ -53,16 +59,12 @@ int	main(void)
 
 
 
-
-
-
-
 // Subject info:
 // executable files as client and server
 // libft YES
 // one global variable per program
 // write, ft_printf, signal, sigemptyset, sigaddset, sigaction
-// kill, getpid, malloc, free, pause, sleep usleep, exit
+// kill, getpid, malloc, free, pause, sleep, usleep, exit
 
 // My other info:
 // message "Hello" will be turned to ASCII. H -> 72 -> 01001000, e -> 101 -> 01100101 etc.
