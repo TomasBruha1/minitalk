@@ -6,15 +6,14 @@
 /*   By: tbruha <tbruha@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 15:42:35 by tbruha            #+#    #+#             */
-/*   Updated: 2024/12/03 18:35:58 by tbruha           ###   ########.fr       */
+/*   Updated: 2024/12/03 20:46:16 by tbruha           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-// What is next: Send anything from client to server.
+// What is next: Create minitalk's Makefile.
 
-// create minitalk's Makefile
 // During that I will set up that for each writen letter I will convert it to ascii
 // and to 00110010011 and send it as SIGUSR1 and SIGUSR2 to the server side from client.
 // How to actually send it from client to server? The "how" part. kill(), but how?
@@ -25,6 +24,7 @@
 
 // ----------------------------------------------------------------------------
 
+// Send anything from client to server. // DONE
 // Run each command in chatGPT and has it explain its use and its return again. // DONE
 // I will need to block other signals while... doing what? What to block? // DONE
 // create minitalk.h // DONE
