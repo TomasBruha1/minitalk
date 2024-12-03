@@ -6,49 +6,27 @@
 /*   By: tbruha <tbruha@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 15:42:35 by tbruha            #+#    #+#             */
-/*   Updated: 2024/12/03 14:54:14 by tbruha           ###   ########.fr       */
+/*   Updated: 2024/12/03 18:35:58 by tbruha           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-// What is next: 
+// What is next: Send anything from client to server.
 
 // create minitalk's Makefile
 // During that I will set up that for each writen letter I will convert it to ascii
-// and to 00110010011 and send it as SIGUSR1 and SIGUSR2 to the client side.
-// I will need to block other signals while... doing what? What to block?
-// Run each command in chatGPT and has it explain its use and its return again.
-// How to actually send it from client to server? The "how" part.
+// and to 00110010011 and send it as SIGUSR1 and SIGUSR2 to the server side from client.
+// How to actually send it from client to server? The "how" part. kill(), but how?
 // Implement my ft_printf here.
+// swap printfs for ft_printfs.
+// For multiple clients, check their PID and block others until message is not over.
+// CodeVault -> UNIX processes in C Youtube.
 
-void	own_handler(int signum)
-{
-	printf("\nReceived signal number %d.\n", signum);
-	printf("Exiting with peace on my mind (aka status 0).\n");
-	exit(0);
-}
+// ----------------------------------------------------------------------------
 
-int	main(void)
-{
-	pid_t				server_pid;
-	sigset_t			set_a;
-	struct sigaction 	sa;
-	
-	sa.sa_handler = own_handler;
-	sigemptyset(&sa.sa_mask);
-	sa.sa_flags = 0;
-		
-	server_pid = getpid();
-	sigaction(SIGINT, &sa, NULL);
-	// signal(SIGINT, own_handler);
-	printf("Running... press CTRL + C to quit. Btw server PID is %d\n.", server_pid);
-	fflush(stdout);
-	while (1)
-		pause();
-	return (0);
-}
-
+// Run each command in chatGPT and has it explain its use and its return again. // DONE
+// I will need to block other signals while... doing what? What to block? // DONE
 // create minitalk.h // DONE
 // Read up on minitalk on gitbook web // DONE
 // Create 2 files for each of 5 functions for signals to keep it clean. No need // DONE
@@ -57,7 +35,7 @@ int	main(void)
 // Why pid_t not pid_ting? <header sys/types.h> // DONE
 // How to run program that doesn't quit? Did I use it yet? sleep, while(1) // DONE
 
-
+// ----------------------------------------------------------------------------
 
 // Subject info:
 // executable files as client and server
