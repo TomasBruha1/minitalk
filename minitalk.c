@@ -6,24 +6,24 @@
 /*   By: tbruha <tbruha@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 15:42:35 by tbruha            #+#    #+#             */
-/*   Updated: 2024/12/03 20:46:16 by tbruha           ###   ########.fr       */
+/*   Updated: 2024/12/04 18:37:50 by tbruha           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-// What is next: Create minitalk's Makefile.
+// What is next: Implement my ft_printf here.
 
+// swap printfs for ft_printfs.
 // During that I will set up that for each writen letter I will convert it to ascii
 // and to 00110010011 and send it as SIGUSR1 and SIGUSR2 to the server side from client.
 // How to actually send it from client to server? The "how" part. kill(), but how?
-// Implement my ft_printf here.
-// swap printfs for ft_printfs.
 // For multiple clients, check their PID and block others until message is not over.
 // CodeVault -> UNIX processes in C Youtube.
 
 // ----------------------------------------------------------------------------
 
+// Create minitalk's Makefile. // DONE
 // Send anything from client to server. // DONE
 // Run each command in chatGPT and has it explain its use and its return again. // DONE
 // I will need to block other signals while... doing what? What to block? // DONE
@@ -46,7 +46,7 @@
 
 // My other info:
 // message "Hello" will be turned to ASCII. H -> 72 -> 01001000, e -> 101 -> 01100101 etc.
-// last one for NULL byte??
+// last one for NULL byte?? That will tell server that it's over (that it's what?? over).
 
 // MANDATORY PART:
 // server first, it will print its PID
