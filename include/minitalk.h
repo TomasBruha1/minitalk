@@ -6,7 +6,7 @@
 /*   By: tbruha <tbruha@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 17:18:04 by tbruha            #+#    #+#             */
-/*   Updated: 2024/12/03 17:40:28 by tbruha           ###   ########.fr       */
+/*   Updated: 2024/12/06 11:36:11 by tbruha           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <stdio.h>
 # include <sys/types.h>
 # include <stdlib.h>
+# include "../libft/libft.h"
 
 // ALLOWED FTs
 
