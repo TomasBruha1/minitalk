@@ -6,7 +6,7 @@
 /*   By: tbruha <tbruha@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 15:42:35 by tbruha            #+#    #+#             */
-/*   Updated: 2024/12/05 21:07:45 by tbruha           ###   ########.fr       */
+/*   Updated: 2024/12/06 22:22:23 by tbruha           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,10 @@
 // send the message.
 // Create a stop condition -> NULL byte?
 // receive signals -> decrypt signals
-//
-
+// How to handle negative numbers in binary. example -16 
+// 1. Find binary value of + character -> 00010000.
+// 2. We flip the digits to the opposite of what it was -> 11101111
+// 3. Add 1. 1 + 1 = 10, you leave 0 and carry a 1 -> 11110000
 // ----------------------------------------------------------------------------
 
 // Create minitalk's Makefile. // DONE
