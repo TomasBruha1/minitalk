@@ -12,9 +12,17 @@
 
 #include "minitalk.h"
 
-void	send_end()
+void	send_end(pid_t server_pid)
 {
-	
+	int	count;
+
+	count = 8;
+	while (count > 0)
+	{
+		kill(server_pid, SIGUSR1);
+		write(1, "0", 1);
+		count--;
+	}
 }
 
 void	char_to_binary(pid_t pid, char *str)
@@ -23,12 +31,10 @@ void	char_to_binary(pid_t pid, char *str)
 	int	i;
 	
 	i = 0;
-	ft_printf("%s\n", str);
-	ft_printf("pid: %d\n", pid);
 	while (str[i] != '\0')
 	{
 		bites = 7;
-		while (bites > 0)
+		while (bites >= 0)
 		{
 			if (((str[i] >> bites) & 1) == 0)
 			{
@@ -41,11 +47,12 @@ void	char_to_binary(pid_t pid, char *str)
 				kill(pid, SIGUSR2);
 			}
 			bites--;
+			usleep(100);
 		}
 		i++;
 		write(1, "\n", 1);
 	}
-	send_end();
+	send_end(pid);
 }	
 
 int	main(int argc, char **argv)
@@ -58,8 +65,6 @@ int	main(int argc, char **argv)
 	str = argv[2];
 	char_to_binary(ft_atoi(argv[1]), str);
 
-	// while (1)
-	// 	pause();
-	// // wait for a 'OK' response after sending the terminating char.
+	pause(); // waiting for response from server
 	return (0);
 }

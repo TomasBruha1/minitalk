@@ -10,7 +10,17 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+// Do NOW: open Oceano video about how to print it.
+
+// Do I wait for 8 bites and then print byte, or do I store all bi/ytes and print
+// once I receive the '\0'?
+// Where would I store the assembled bytes from bites?
+// global variables for 8 bites -> assemble -> print/save -> erase (memset, 0)
+//
+
 #include "minitalk.h"
+
+char	g_bites_received;
 
 void	handle_sigint(int signum)
 {
