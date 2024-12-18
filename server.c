@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-// Do NOW: open Oceano video about how to print it.
+// Do NOW: Store 8 bites and print char.
 
 // Do I wait for 8 bites and then print byte, or do I store all bi/ytes and print
 // once I receive the '\0'?
@@ -20,7 +20,7 @@
 
 #include "minitalk.h"
 
-char	g_bites_received;
+char	g_bites_received[9];
 
 void	handle_sigint(int signum)
 {
@@ -29,32 +29,34 @@ void	handle_sigint(int signum)
 	exit(0);
 }
 
-void	handle_sigusr1(int signum)
+void	handle_sigusrs(int signum)
 {
-	ft_printf("Received signal number %d.\n\n", signum);
-	ft_printf("Hello World\n");
-}
+	if (signum == SIGUSR1)
+	{
 
-void	handle_sigusr2(int signum)
-{
-	ft_printf("%d", signum);
-	return ;
+	}
+	else
+	{
+
+	}
 }
 
 int	main(void)
 {
-	struct sigaction 	sa;
+	// struct sigaction 	sa;
 
-	sa.sa_handler = handle_sigint;
-	sigemptyset(&sa.sa_mask);
-	sa.sa_flags = 0;
+	// sa.sa_handler = handle_sigint;
+	// sigemptyset(&sa.sa_mask);
+	// sa.sa_flags = 0;
 		
-	signal(SIGUSR1, handle_sigusr1);
-	sigaction(SIGINT, &sa, NULL);
-	// signal(SIGINT, handle_sigint);
+	signal(SIGUSR1, handle_sigusrs);
+	signal(SIGUSR2, handle_sigusrs);
+	signal(SIGINT, handle_sigint);
+//	sigaction(SIGINT, &sa, NULL);
 	ft_printf("Server PID is %d.\n", getpid());
 	fflush(stdout);
-	ft_printf("Running... waiting for stuff to print...\n\n");
+	ft_printf("Running... waiting for stuff to print...\nRun ./client from"
+	" different terminal and send Server's PID and a message to send\n");
 	while (1)
 		pause();
 	return (0);

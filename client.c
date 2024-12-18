@@ -12,6 +12,8 @@
 
 #include "minitalk.h"
 
+// sig handler for receiving SIGUSR1 -> "Message received!"
+
 void	send_end(pid_t server_pid)
 {
 	int	count;
