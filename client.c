@@ -62,9 +62,10 @@ int	main(int argc, char **argv)
 	char *str;
 
 	if (argc != 3)
-		return (1);	
+		return (EXIT_FAILURE);
 	ft_printf("Running....\n");
 	str = argv[2];
+	len = ft_strlen(str);
 	char_to_binary(ft_atoi(argv[1]), str);
 
 	pause(); // waiting for response from server

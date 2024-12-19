@@ -22,23 +22,6 @@
 # include <stdlib.h>
 # include "../libft/libft.h"
 
-// ALLOWED FTs
-
-// ◦ write
-// ◦ ft_printf and/or any equivalent YOU coded
-// ◦ signal
-// ◦ sigemptyset
-// ◦ sigaddset
-// ◦ sigaction
-// ◦ kill
-// ◦ getpid
-// ◦ malloc
-// ◦ free
-// ◦ pause
-// ◦ sleep
-// ◦ usleep	
-// ◦ exit
-
 // STRUCTS
 
 // MINITALK FTs

@@ -10,53 +10,57 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-// Do NOW: Store 8 bites and print char.
+// Do NOW: 
 
-// Do I wait for 8 bites and then print byte, or do I store all bi/ytes and print
-// once I receive the '\0'?
-// Where would I store the assembled bytes from bites?
-// global variables for 8 bites -> assemble -> print/save -> erase (memset, 0)
-//
+// get message length via strlen
+// send the int len to server
+// allocate for the message +1, int max 2147483647
+// memset before using the char at server
+// Client's PID -> sigaction siginfo_t si_pid
+
+// ----------------------------------------------------------------------------
+
+// get PID and print PID upon start // DONE
+// message "running and waiting for something to print" + while (1) // DONE
 
 #include "minitalk.h"
 
-char	g_bites_received[9];
-
-void	handle_sigint(int signum)
-{
-	ft_printf("\nReceived signal number %d.\n", signum);
-	ft_printf("Exiting with peace on my mind (aka status 0).\n");
-	exit(0);
-}
+char	g_bites;
 
 void	handle_sigusrs(int signum)
 {
-	if (signum == SIGUSR1)
+	char	to_print;
+	
+	to_print = '0';
+	while (g_bites < 8)
 	{
+		if (signum == SIGUSR1)
+		{
+			
+		}
+		else
+		{
 
-	}
-	else
-	{
-
+		}
+		g_bites++;
 	}
 }
 
-int	main(void)
-{
+int	main(int argc, char **argv)
+{	
 	// struct sigaction 	sa;
 
 	// sa.sa_handler = handle_sigint;
 	// sigemptyset(&sa.sa_mask);
 	// sa.sa_flags = 0;
-		
+	
+	if (argc != 1)
+		return (EXIT_FAILURE);
 	signal(SIGUSR1, handle_sigusrs);
 	signal(SIGUSR2, handle_sigusrs);
-	signal(SIGINT, handle_sigint);
 //	sigaction(SIGINT, &sa, NULL);
 	ft_printf("Server PID is %d.\n", getpid());
 	fflush(stdout);
-	ft_printf("Running... waiting for stuff to print...\nRun ./client from"
-	" different terminal and send Server's PID and a message to send\n");
 	while (1)
 		pause();
 	return (0);
