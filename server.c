@@ -10,8 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-// Do NOW: receive message len in bin and convert to 
+// DO NOW: receive message len in bin and convert to 
 
+// DO NOW NOW: find info on git for sending int len
+
+// how NOT to print LEN I sent at the beginning? set up other sigs after??
+// sigaction within sigaction??
 // alloc for max int so 10 + 1 spaces
 // allocate for the message +1, int max 2147483647
 // memset before using the char at server. Memset the allocated string?
@@ -57,6 +61,7 @@ void	handle_sigusrs(int signum)
 int	main(int argc, char **argv)
 {	
 	(void)argv;
+	char	len;
 	
 	// struct sigaction 	sa;
 
@@ -73,6 +78,11 @@ int	main(int argc, char **argv)
 	ft_printf("Running... waiting for message to print\n");
 	ft_printf("Run ./client with server PID and message to send as args.\n");
 	fflush(stdout);
+
+	len = malloc(sizeof(char) 100);
+
+
+
 	while (1)
 		pause();
 	return (0);
