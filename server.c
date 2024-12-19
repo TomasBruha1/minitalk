@@ -10,18 +10,26 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-// Do NOW: 
+// Do NOW: receive message len in bin and convert to 
 
-// get message length via strlen
-// send the int len to server
+// alloc for max int so 10 + 1 spaces
 // allocate for the message +1, int max 2147483647
-// memset before using the char at server
+// memset before using the char at server. Memset the allocated string?
+// static for 8 bits, when 8 assemble char and add it o str[i]
+// if '\0' send SIGUSR1/2 to print confirmation at client and close it.
+// 
 // Client's PID -> sigaction siginfo_t si_pid
+// Will I need bool for start/stop of sending chars to server? Try without 1st
+// Do I need to type out everything that is on my mind? It does help to clear
+// my head out with thougts when preparing for new project @ 42 and my atf is better.
 
 // ----------------------------------------------------------------------------
 
 // get PID and print PID upon start // DONE
 // message "running and waiting for something to print" + while (1) // DONE
+// unused argv -> (void)argv // DONE
+// get message length via strlen. // DONE
+// send the int len to server, char by char // DONE
 
 #include "minitalk.h"
 
@@ -48,6 +56,8 @@ void	handle_sigusrs(int signum)
 
 int	main(int argc, char **argv)
 {	
+	(void)argv;
+	
 	// struct sigaction 	sa;
 
 	// sa.sa_handler = handle_sigint;
@@ -60,6 +70,8 @@ int	main(int argc, char **argv)
 	signal(SIGUSR2, handle_sigusrs);
 //	sigaction(SIGINT, &sa, NULL);
 	ft_printf("Server PID is %d.\n", getpid());
+	ft_printf("Running... waiting for message to print\n");
+	ft_printf("Run ./client with server PID and message to send as args.\n");
 	fflush(stdout);
 	while (1)
 		pause();

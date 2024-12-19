@@ -13,6 +13,7 @@
 #include "minitalk.h"
 
 // sig handler for receiving SIGUSR1 -> "Message received!"
+// void	handle_ok(int signum)
 
 void	send_end(pid_t server_pid)
 {
@@ -25,6 +26,7 @@ void	send_end(pid_t server_pid)
 		write(1, "0", 1);
 		count--;
 	}
+	write(1, "\n", 1);
 }
 
 void	char_to_binary(pid_t pid, char *str)
@@ -54,20 +56,26 @@ void	char_to_binary(pid_t pid, char *str)
 		i++;
 		write(1, "\n", 1);
 	}
-	send_end(pid);
 }	
 
 int	main(int argc, char **argv)
 {
-	char *str;
+	char	*str;
+	int		len;	
 
 	if (argc != 3)
 		return (EXIT_FAILURE);
-	ft_printf("Running....\n");
+//	signal(SIGUSR1, handle_ok);
 	str = argv[2];
 	len = ft_strlen(str);
+	ft_printf("%d\n", len);
+	write(1, "\n", 1);
+	char_to_binary(ft_atoi(argv[1]), ft_itoa(len));
+	write(1, "\n", 1);
 	char_to_binary(ft_atoi(argv[1]), str);
-
+	write(1, "\n", 1);
+	send_end(ft_atoi(argv[1]));
+	ft_printf("Waiting for response....\n");
 	pause(); // waiting for response from server
-	return (0);
+	return (EXIT_SUCCESS);
 }
