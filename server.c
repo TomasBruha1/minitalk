@@ -14,12 +14,14 @@
 
 // DO NOW NOW: find info on git for sending int len
 
+// DO BEFORE LEAVING
+
 // how NOT to print LEN I sent at the beginning? set up other sigs after??
 // sigaction within sigaction??
 // alloc for max int so 10 + 1 spaces
 // allocate for the message +1, int max 2147483647
 // memset before using the char at server. Memset the allocated string?
-// static for 8 bits, when 8 assemble char and add it o str[i]
+// static for 8 bits, when 8 assemble char and add it to str[i]
 // if '\0' send SIGUSR1/2 to print confirmation at client and close it.
 // 
 // Client's PID -> sigaction siginfo_t si_pid
