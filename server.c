@@ -14,7 +14,7 @@
 
 // DO NOW NOW: find info on git for sending int len
 
-// DO BEFORE LEAVING
+// DO BEFORE LEAVING: commit to GIT to start a super long streak.
 
 // how NOT to print LEN I sent at the beginning? set up other sigs after??
 // sigaction within sigaction??
