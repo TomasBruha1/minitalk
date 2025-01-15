@@ -14,8 +14,6 @@
 
 // DO NOW NOW: find info on git for sending int len
 
-// DO BEFORE LEAVING: commit to GIT to start a super long streak.
-
 // how NOT to print LEN I sent at the beginning? set up other sigs after??
 // sigaction within sigaction??
 // alloc for max int so 10 + 1 spaces
@@ -27,6 +25,7 @@
 // Client's PID -> sigaction siginfo_t si_pid
 // Will I need bool for start/stop of sending chars to server? Try without 1st
 // Do I need to type out everything that is on my mind? It does help to clear
+// How to re-alocatte without realloc?
 // my head out with thougts when preparing for new project @ 42 and my atf is better.
 
 // ----------------------------------------------------------------------------
@@ -39,7 +38,7 @@
 
 #include "minitalk.h"
 
-char	g_bites;
+char	g_bites[2048];
 
 void	handle_sigusrs(int signum)
 {
@@ -63,7 +62,7 @@ void	handle_sigusrs(int signum)
 int	main(int argc, char **argv)
 {	
 	(void)argv;
-	char	len;
+	int	*len;
 	
 	// struct sigaction 	sa;
 
@@ -81,7 +80,7 @@ int	main(int argc, char **argv)
 	ft_printf("Run ./client with server PID and message to send as args.\n");
 	fflush(stdout);
 
-	len = malloc(sizeof(char) 100);
+	len = malloc(sizeof(int) *100);
 
 
 
