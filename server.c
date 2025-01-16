@@ -10,9 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-// DO NOW: receive message len in bin and convert to 
-
-// DO NOW NOW: find info on git for sending int len
+// NOW: print stuff char by char on server side
 
 // how NOT to print LEN I sent at the beginning? set up other sigs after??
 // sigaction within sigaction??
@@ -21,7 +19,6 @@
 // memset before using the char at server. Memset the allocated string?
 // static for 8 bits, when 8 assemble char and add it to str[i]
 // if '\0' send SIGUSR1/2 to print confirmation at client and close it.
-// 
 // Client's PID -> sigaction siginfo_t si_pid
 // Will I need bool for start/stop of sending chars to server? Try without 1st
 // How to re-alocatte without realloc?
@@ -38,27 +35,39 @@
 
 char	g_msg[10];
 
-void	print_char()
+// void	print_char()
 
 // Handles SIGUSR1 and 2. 
 void	handle_sigusrs(int signum)
 {
-	char		to_print;
 	static int	bites;
-	to_print = '0';
-	while (bites < 8)
-	{
-		if (signum == SIGUSR1)
-		{
-			
-		}
-		else
-		{
+	static int	i;
+	static int	j;
 
+	while (i < 8)
+	{
+		if (signum == SIGUSR2)
+		{
+			bites = bites | (1 << i);
+			write(1, "1", 1);
 		}
-		bites++;
-		if (bites == 8)
-			print_char()
+		// else
+		// 	write(1, "0", 1);
+		i++;
+		if (i == 8)
+		{
+			write(1, "\n", 1);
+			g_msg[j] = bites;
+				// if (bites == '\0')
+				// {
+				// 	// print and send SIGUSR1 to client as confirmation
+				// 	return;
+				// }
+			bites = 0;
+			i = 0;
+			j++;
+			write(1, "test\n", 5);
+		}
 	}
 }
 

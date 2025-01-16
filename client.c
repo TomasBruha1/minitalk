@@ -42,12 +42,19 @@ void	char_to_binary(pid_t pid, char *str)
 		while (bites >= 0)
 		{
 			if (((str[i] >> bites) & 1) == 0)
+			{
+				write(1, "0", 1);
 				kill(pid, SIGUSR1);
+			}	
 			else
+			{	
+				write(1, "1", 1);
 				kill(pid, SIGUSR2);
+			}
 			bites--;
 			usleep(250);
 		}
+		write(1, "\n", 1);
 		i++;
 	}
 }
@@ -61,7 +68,7 @@ int	main(int argc, char **argv)
 	if (argc != 3)
 	{
 		ft_printf("Wrong number of arguments.\n");
-		ft_printf("Write server's PID and message to send. Exiting...\n");
+		ft_printf("Write server's PID and message to send next time. BYE\n");
 		return (EXIT_FAILURE);
 	}
 //	signal(SIGUSR1, handle_ok);
@@ -69,7 +76,7 @@ int	main(int argc, char **argv)
 	len = ft_strlen(str);
 //	char_to_binary(ft_atoi(argv[1]), ft_itoa(len)); // For sending len
 	char_to_binary(ft_atoi(argv[1]), str); // sending msg
-	send_end(ft_atoi(argv[1])); // send '\n'
+//	send_end(ft_atoi(argv[1])); // send '\n'
 	ft_printf("Waiting for response....\n");
 	pause(); // waiting for response from server
 	return (EXIT_SUCCESS);
