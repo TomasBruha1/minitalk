@@ -24,9 +24,7 @@
 // 
 // Client's PID -> sigaction siginfo_t si_pid
 // Will I need bool for start/stop of sending chars to server? Try without 1st
-// Do I need to type out everything that is on my mind? It does help to clear
 // How to re-alocatte without realloc?
-// my head out with thougts when preparing for new project @ 42 and my atf is better.
 
 // ----------------------------------------------------------------------------
 
@@ -38,14 +36,17 @@
 
 #include "minitalk.h"
 
-char	g_bites[2048];
+char	g_msg[10];
 
+void	print_char()
+
+// Handles SIGUSR1 and 2. 
 void	handle_sigusrs(int signum)
 {
-	char	to_print;
-	
+	char		to_print;
+	static int	bites;
 	to_print = '0';
-	while (g_bites < 8)
+	while (bites < 8)
 	{
 		if (signum == SIGUSR1)
 		{
@@ -55,10 +56,15 @@ void	handle_sigusrs(int signum)
 		{
 
 		}
-		g_bites++;
+		bites++;
+		if (bites == 8)
+			print_char()
 	}
 }
 
+// Prints out it's PID and waits for msg. Then prints it char by char now.
+// After receiving the entire message it will send SIGUSR1 back as confirmation
+// I will do it char by char now and switch to full message later. UNI should work.
 int	main(int argc, char **argv)
 {	
 	(void)argv;
@@ -68,22 +74,21 @@ int	main(int argc, char **argv)
 
 	// sa.sa_handler = handle_sigint;
 	// sigemptyset(&sa.sa_mask);
-	// sa.sa_flags = 0;
+	// sa.sa_flags = SA_SIGINFO;
 	
 	if (argc != 1)
+	{
+		ft_printf("No arguments allowed\n");
 		return (EXIT_FAILURE);
+	}
 	signal(SIGUSR1, handle_sigusrs);
 	signal(SIGUSR2, handle_sigusrs);
 //	sigaction(SIGINT, &sa, NULL);
 	ft_printf("Server PID is %d.\n", getpid());
-	ft_printf("Running... waiting for message to print\n");
+	ft_printf("Waiting for message to print.\n\n");
 	ft_printf("Run ./client with server PID and message to send as args.\n");
-	fflush(stdout);
-
-	len = malloc(sizeof(int) *100);
-
-
-
+//	fflush(stdout);
+	len = malloc(sizeof(int) *13);
 	while (1)
 		pause();
 	return (0);
