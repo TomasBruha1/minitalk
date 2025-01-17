@@ -46,27 +46,32 @@ void	handle_sigusrs(int signum)
 
 	while (i < 8)
 	{
+		// print signum
 		if (signum == SIGUSR2)
 		{
 			bites = bites | (1 << i);
 			write(1, "1", 1);
+			write(1, "test2\n", 6);
 		}
-		// else
-		// 	write(1, "0", 1);
+		else
+		{
+			write(1, "0", 1);
+			write(1, "test3\n", 6);
+		}
 		i++;
 		if (i == 8)
 		{
 			write(1, "\n", 1);
 			g_msg[j] = bites;
-				// if (bites == '\0')
-				// {
-				// 	// print and send SIGUSR1 to client as confirmation
-				// 	return;
-				// }
+				if (bites == '\0')
+				{
+					// print and send SIGUSR1 to client as confirmation
+					return;
+				}
 			bites = 0;
 			i = 0;
 			j++;
-			write(1, "test\n", 5);
+			write(1, "test2\n", 6);
 		}
 	}
 }
@@ -77,14 +82,14 @@ void	handle_sigusrs(int signum)
 int	main(int argc, char **argv)
 {	
 	(void)argv;
-	int	*len;
+//	int	*len;
 	
 	// struct sigaction 	sa;
 
 	// sa.sa_handler = handle_sigint;
 	// sigemptyset(&sa.sa_mask);
 	// sa.sa_flags = SA_SIGINFO;
-	
+	ft_printf("AHOJ\n");
 	if (argc != 1)
 	{
 		ft_printf("No arguments allowed\n");
@@ -97,7 +102,7 @@ int	main(int argc, char **argv)
 	ft_printf("Waiting for message to print.\n\n");
 	ft_printf("Run ./client with server PID and message to send as args.\n");
 //	fflush(stdout);
-	len = malloc(sizeof(int) *13);
+//	len = malloc(sizeof(int) *13);
 	while (1)
 		pause();
 	return (0);

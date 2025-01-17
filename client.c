@@ -76,7 +76,7 @@ int	main(int argc, char **argv)
 	len = ft_strlen(str);
 //	char_to_binary(ft_atoi(argv[1]), ft_itoa(len)); // For sending len
 	char_to_binary(ft_atoi(argv[1]), str); // sending msg
-//	send_end(ft_atoi(argv[1])); // send '\n'
+	send_end(ft_atoi(argv[1])); // send '\n'
 	ft_printf("Waiting for response....\n");
 	pause(); // waiting for response from server
 	return (EXIT_SUCCESS);
