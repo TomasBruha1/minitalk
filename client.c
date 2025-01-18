@@ -25,6 +25,8 @@ void	send_end(pid_t server_pid)
 	{
 		kill(server_pid, SIGUSR1);
 		count--;
+		write(1, "0",1);
+		usleep(200);
 	}
 	write(1, "\n", 1);
 }
@@ -52,7 +54,7 @@ void	char_to_binary(pid_t pid, char *str)
 				kill(pid, SIGUSR2);
 			}
 			bites--;
-			usleep(250);
+			usleep(200);
 		}
 		write(1, "\n", 1);
 		i++;
@@ -76,7 +78,7 @@ int	main(int argc, char **argv)
 	len = ft_strlen(str);
 //	char_to_binary(ft_atoi(argv[1]), ft_itoa(len)); // For sending len
 	char_to_binary(ft_atoi(argv[1]), str); // sending msg
-	send_end(ft_atoi(argv[1])); // send '\n'
+	send_end(ft_atoi(argv[1])); // send '\0'
 	ft_printf("Waiting for response....\n");
 	pause(); // waiting for response from server
 	return (EXIT_SUCCESS);

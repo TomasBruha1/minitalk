@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 // NOW: print stuff char by char on server side
+// NOW NOW: condition for NOT else is wrong
 
 // how NOT to print LEN I sent at the beginning? set up other sigs after??
 // sigaction within sigaction??
@@ -44,35 +45,31 @@ void	handle_sigusrs(int signum)
 	static int	i;
 	static int	j;
 
-	while (i < 8)
+	if (signum == 12)
 	{
-		// print signum
-		if (signum == SIGUSR2)
-		{
-			bites = bites | (1 << i);
-			write(1, "1", 1);
-			write(1, "test2\n", 6);
-		}
-		else
-		{
-			write(1, "0", 1);
-			write(1, "test3\n", 6);
-		}
-		i++;
-		if (i == 8)
-		{
-			write(1, "\n", 1);
-			g_msg[j] = bites;
-				if (bites == '\0')
-				{
-					// print and send SIGUSR1 to client as confirmation
-					return;
-				}
-			bites = 0;
-			i = 0;
-			j++;
-			write(1, "test2\n", 6);
-		}
+	//	ft_printf("signum: %d\n", signum);
+		bites = bites | (1 << i);
+		write(1, "1\n", 2);
+	}
+	else
+	{
+	//	ft_printf("signum: %d\n", signum);
+		write(1, "0\n", 2);
+	}
+	i++;
+	if (i == 8)
+	{
+		g_msg[j] = bites;
+			// if (bites == '\0')
+			// {
+			// 	ft_printf("%s\n", g_msg);
+			// 	// print and send SIGUSR1 to client as confirmation
+			// 	return;
+			// }
+		bites = 0;
+		i = 0;
+		j++;
+		write(1, "char end\n\n", 9);
 	}
 }
 
