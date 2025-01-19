@@ -20,6 +20,7 @@
 # include <stdio.h>
 # include <sys/types.h>
 # include <stdlib.h>
+# include <stdbool.h>
 # include "../libft/libft.h"
 
 // STRUCTS
