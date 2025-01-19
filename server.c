@@ -10,14 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-// NOW: print stuff char by char on server side
-// NOW NOW: condition for NOT else is wrong
 
-// how NOT to print LEN I sent at the beginning? set up other sigs after??
-// sigaction within sigaction??
-// alloc for max int so 10 + 1 spaces
-// allocate for the message +1, int max 2147483647
-// memset before using the char at server. Memset the allocated string?
+// memset/bzero before using the char at server. Memset the allocated string?
 // static for 8 bits, when 8 assemble char and add it to str[i]
 // if '\0' send SIGUSR1/2 to print confirmation at client and close it.
 // Client's PID -> sigaction siginfo_t si_pid
@@ -26,6 +20,8 @@
 
 // ----------------------------------------------------------------------------
 
+// NOW: print stuff char by char on server side, check if condition. // DONE
+// It receives multiple messages from different terminals. // DONE
 // get PID and print PID upon start // DONE
 // message "running and waiting for something to print" + while (1) // DONE
 // unused argv -> (void)argv // DONE
@@ -34,7 +30,7 @@
 
 #include "minitalk.h"
 
-char	g_msg[10];
+char	g_msg[1000];
 
 // void	print_char()
 
@@ -45,10 +41,10 @@ void	handle_sigusrs(int signum)
 	static int	i;
 	static int	j;
 
+	ft_printf("\"bites\" before shifting: %d\n", bites);
 	if (signum == 12)
 	{
-	//	ft_printf("signum: %d\n", signum);
-		bites = bites | (1 << i);
+		bites = bites | (128 >> i);
 		write(1, "1\n", 2);
 	}
 	else
@@ -60,6 +56,8 @@ void	handle_sigusrs(int signum)
 	if (i == 8)
 	{
 		g_msg[j] = bites;
+		ft_printf("\"bites\" full: %d\n\n", bites);
+		ft_printf("assembled char: %s\n\n", g_msg); // final
 			// if (bites == '\0')
 			// {
 			// 	ft_printf("%s\n", g_msg);
@@ -69,7 +67,6 @@ void	handle_sigusrs(int signum)
 		bites = 0;
 		i = 0;
 		j++;
-		write(1, "char end\n\n", 9);
 	}
 }
 
@@ -86,7 +83,6 @@ int	main(int argc, char **argv)
 	// sa.sa_handler = handle_sigint;
 	// sigemptyset(&sa.sa_mask);
 	// sa.sa_flags = SA_SIGINFO;
-	ft_printf("AHOJ\n");
 	if (argc != 1)
 	{
 		ft_printf("No arguments allowed\n");
