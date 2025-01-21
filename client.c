@@ -14,9 +14,19 @@
 
 bool	g_ready_flag;
 
-void	ready_to_send_char()
+void	flag_handler(int signum)
 {
+	if (signum == 10)
+		g_ready_flag = true;
+}
 
+void	msg_ok_handler(int signum)
+{
+	if (signum == 12)
+	{
+		ft_printf("Message received!\n");
+
+	}
 }
 
 // sig handler for receiving SIGUSR1 -> "Message received!"
@@ -32,10 +42,8 @@ void	send_end(pid_t server_pid)
 	{
 		kill(server_pid, SIGUSR1);
 		count--;
-		write(1, "0",1);
-		usleep(200);
+		usleep(250);
 	}
-	write(1, "\n", 1);
 }
 
 // It converts the msg and send it via bits to server.
@@ -55,7 +63,13 @@ void	char_to_binary(pid_t pid, char *str)
 			else
 				kill(pid, SIGUSR2);
 			bites--;
-			usleep(250);
+			usleep(175);
+		}
+		g_ready_flag = false;
+		while (1)
+		{
+			if (g_ready_flag == true)
+				break;
 		}
 		i++;
 	}
@@ -65,7 +79,7 @@ void	char_to_binary(pid_t pid, char *str)
 int	main(int argc, char **argv)
 {
 	char	*str;
-	int		len;	
+	int		server_pid;
 
 	if (argc != 3)
 	{
@@ -73,12 +87,12 @@ int	main(int argc, char **argv)
 		ft_printf("Write server's PID and message to send next time. BYE\n");
 		return (EXIT_FAILURE);
 	}
-//	signal(SIGUSR1, handle_ok); One handle for next char and OK msg.
+	signal(SIGUSR1, flag_handler);
+	signal(SIGUSR2, msg_ok_handler);
 	str = argv[2];
-	len = ft_strlen(str);
-	char_to_binary(ft_atoi(argv[1]), str);
-	send_end(ft_atoi(argv[1])); // send '\0'
-//	ft_printf("Waiting for response....\n");
-//	pause(); // waiting for response from server
+	server_pid = ft_atoi(argv[1]);
+	char_to_binary(server_pid, str);
+	send_end(server_pid); // send '\0'
+	pause(); // waiting for response from server
 	return (EXIT_SUCCESS);
 }

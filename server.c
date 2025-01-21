@@ -16,24 +16,27 @@
 
 #include "minitalk.h"
 
-char	g_msg[1000]; // Could it be just a static? Why do I have global
+char	g_msg[5000]; // Could it be just a static? Why do I have global
 
 // Handles SIGUSR1 and SIGUSR2 and get's client's PID via si_pid.
 void	handle_sigusrs(int signum, siginfo_t *info, void *context_t)
 {
+	(void)context_t;	
 	static int	bites;
 	static int	i;
 	static int	j;
 	pid_t		client_pid;
 	
-	client_pid = info->si_pid;
+	client_pid = 0;
+	if (client_pid == 0)
+		client_pid = info->si_pid;
 	if (signum == 12)
 		bites = bites | (128 >> i);
 	i++;
 	if (i == 8)
 	{
 		g_msg[j] = bites;
-		kill(client_pid, SIGUSR1);
+//		kill(client_pid, SIGUSR2);
 		if (bites == '\0')
 		{
 			ft_printf("%s\n\n", g_msg);
@@ -57,7 +60,7 @@ int	main(int argc, char **argv)
 	(void)argv;
 	struct sigaction 	sa;
 
-	sa.sa_handler = handle_sigusrs;
+	sa.sa_sigaction = handle_sigusrs;
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = SA_RESTART | SA_SIGINFO;
 	if (argc != 1)
