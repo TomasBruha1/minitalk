@@ -10,18 +10,24 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-// DO NOW: Set up flag for sending another char and usleep for lower. 
-// DO NOW NOW: change signal to sigaction and get clients PID.
+// 💁👌🎍😍😊💙💜🖤
 
+// DO NOW: below -> -> ->
+// realocate global on server to double and memcpy to another variable and back.
+// What about leaks? Free upon printing.
+
+// ERRORS
+// Client will sometimes print "OK", but will not shutdown.
+// Server stops printing after roughly 10th message.
 
 #include "minitalk.h"
 
-char	g_msg[5000]; // Could it be just a static? Why do I have global
+char	*g_msg = 0; // Could it be just a static? Why do I have global
 
 // Handles SIGUSR1 and SIGUSR2 and get's client's PID via si_pid.
 void	handle_sigusrs(int signum, siginfo_t *info, void *context_t)
 {
-	(void)context_t;	
+	(void)context_t;
 	static int	bites;
 	static int	i;
 	static int	j;
@@ -36,14 +42,16 @@ void	handle_sigusrs(int signum, siginfo_t *info, void *context_t)
 	if (i == 8)
 	{
 		g_msg[j] = bites;
-//		kill(client_pid, SIGUSR2);
-		if (bites == '\0')
+		kill(client_pid, SIGUSR1);
+		if (bites == '\0') // set up separate function to save lines.
 		{
 			ft_printf("%s\n\n", g_msg);
-			ft_bzero(g_msg, 0); // it is using bzero on ZERO bytes, fix it.
+			ft_bzero(g_msg, sizeof(g_msg));
 			bites = 0;
 			i = 0;
-			// print and send SIGUSR1 to client as confirmation
+			j = 0;
+			kill(client_pid, SIGUSR2);
+			free(g_msg);
 			return;
 		}
 		bites = 0;
@@ -68,8 +76,12 @@ int	main(int argc, char **argv)
 		ft_printf("No arguments allowed\n");
 		return (EXIT_FAILURE);
 	}
-//	signal(SIGUSR1, handle_sigusrs);
-//	signal(SIGUSR2, handle_sigusrs);
+	g_msg = malloc(1024);
+	if (!g_msg)
+	{
+		free(g_msg);
+		EXIT_FAILURE;
+	}
 	sigaction(SIGUSR1, &sa, NULL);
 	sigaction(SIGUSR2, &sa, NULL);
 	ft_printf("Server PID is %d.\n", getpid());
@@ -77,17 +89,18 @@ int	main(int argc, char **argv)
 	ft_printf("Run ./client with server PID and message to send as args.\n");
 	while (1)
 		pause();
+	write(1, "Not sure why it is here\n", 24);
 	return (0);
 }
 
-// Client's PID -> sigaction siginfo_t si_pid
-// memset/bzero memory on heap? It is necessary?
-// When char is assembled, send SIGUSR1 to send another char.
-// When '\0' is received, send SIGUSR2 to print confirmation at client.
-// After printing final msg, reset msg with bzero so it can receive new one.
-
 // ----------------------------------------------------------------------------
 
+// After printing final msg, reset msg with bzero so it can receive new one. // DONE
+// When '\0' is received, send SIGUSR2 to print confirmation at client. // DONE
+// When char is assembled, send SIGUSR1 to send another char. // DONE
+// Set up flag for sending another char and usleep for lower. // DONE
+// Change signal to sigaction and get clients PID. // DONE
+// Client's PID -> sigaction siginfo_t si_pid // DONE
 // Emojis are working now. // DONE
 // NOW: print stuff char by char on server side, check if condition. // DONE
 // It receives multiple messages from different terminals. // DONE

@@ -12,25 +12,24 @@
 
 #include "minitalk.h"
 
-bool	g_ready_flag;
+sig_atomic_t	g_ready_flag;
 
+// Handler changes flag to 1 upon receiving SIGUSR1.
 void	flag_handler(int signum)
 {
 	if (signum == 10)
-		g_ready_flag = true;
+		g_ready_flag = 1;
 }
 
+// Handler prints "message received" and exits once receives SIGUSR2.
 void	msg_ok_handler(int signum)
 {
 	if (signum == 12)
 	{
 		ft_printf("Message received!\n");
-
+		EXIT_SUCCESS;
 	}
 }
-
-// sig handler for receiving SIGUSR1 -> "Message received!"
-// void	handle_ok(int signum)
 
 // It sends the last char so server knows the message is over and sends Ok back
 void	send_end(pid_t server_pid)
@@ -42,7 +41,7 @@ void	send_end(pid_t server_pid)
 	{
 		kill(server_pid, SIGUSR1);
 		count--;
-		usleep(250);
+		usleep(150);
 	}
 }
 
@@ -65,14 +64,12 @@ void	char_to_binary(pid_t pid, char *str)
 			bites--;
 			usleep(175);
 		}
-		g_ready_flag = false;
-		while (1)
-		{
-			if (g_ready_flag == true)
-				break;
-		}
+		g_ready_flag = 0;
+		while (g_ready_flag == 1)
+			usleep(50);
 		i++;
 	}
+	send_end(pid);
 }
 
 // It sends msg as 0 and 1 to server. Then it waits for response from server.
@@ -89,10 +86,9 @@ int	main(int argc, char **argv)
 	}
 	signal(SIGUSR1, flag_handler);
 	signal(SIGUSR2, msg_ok_handler);
-	str = argv[2];
 	server_pid = ft_atoi(argv[1]);
+	str = argv[2];
 	char_to_binary(server_pid, str);
-	send_end(server_pid); // send '\0'
-	pause(); // waiting for response from server
+	pause();
 	return (EXIT_SUCCESS);
 }
