@@ -10,32 +10,34 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-// DO NOW NOW: Set up flag for sending another char and usleep for lower. 
-// DO NOW NOW NOW: change signal to sigaction and get clients PID.
+// DO NOW: Set up flag for sending another char and usleep for lower. 
+// DO NOW NOW: change signal to sigaction and get clients PID.
 
 
 #include "minitalk.h"
 
 char	g_msg[1000]; // Could it be just a static? Why do I have global
 
-// Handles SIGUSR1 and 2. 
-void	handle_sigusrs(int signum)
+// Handles SIGUSR1 and SIGUSR2 and get's client's PID via si_pid.
+void	handle_sigusrs(int signum, siginfo_t *info, void *context_t)
 {
 	static int	bites;
 	static int	i;
 	static int	j;
-
+	pid_t		client_pid;
+	
+	client_pid = info->si_pid;
 	if (signum == 12)
 		bites = bites | (128 >> i);
 	i++;
 	if (i == 8)
 	{
 		g_msg[j] = bites;
-		kill()
+		kill(client_pid, SIGUSR1);
 		if (bites == '\0')
 		{
 			ft_printf("%s\n\n", g_msg);
-			ft_bzero(g_msg, 0);
+			ft_bzero(g_msg, 0); // it is using bzero on ZERO bytes, fix it.
 			bites = 0;
 			i = 0;
 			// print and send SIGUSR1 to client as confirmation
@@ -45,7 +47,6 @@ void	handle_sigusrs(int signum)
 		i = 0;
 		j++;
 	}
-//	How to receive multiple messages while running?
 }
 
 // Prints out it's PID and waits for msg. Then prints it char by char now.
@@ -54,24 +55,23 @@ void	handle_sigusrs(int signum)
 int	main(int argc, char **argv)
 {	
 	(void)argv;
-	
-	// struct sigaction 	sa;
+	struct sigaction 	sa;
 
-	// sa.sa_handler = handle_sigint;
-	// sigemptyset(&sa.sa_mask);
-	// sa.sa_flags = SA_SIGINFO;
+	sa.sa_handler = handle_sigusrs;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = SA_RESTART | SA_SIGINFO;
 	if (argc != 1)
 	{
 		ft_printf("No arguments allowed\n");
 		return (EXIT_FAILURE);
 	}
-	signal(SIGUSR1, handle_sigusrs);
-	signal(SIGUSR2, handle_sigusrs);
-//	sigaction(SIGINT, &sa, NULL);
+//	signal(SIGUSR1, handle_sigusrs);
+//	signal(SIGUSR2, handle_sigusrs);
+	sigaction(SIGUSR1, &sa, NULL);
+	sigaction(SIGUSR2, &sa, NULL);
 	ft_printf("Server PID is %d.\n", getpid());
 	ft_printf("Waiting for message to print.\n\n");
 	ft_printf("Run ./client with server PID and message to send as args.\n");
-//	fflush(stdout);
 	while (1)
 		pause();
 	return (0);
