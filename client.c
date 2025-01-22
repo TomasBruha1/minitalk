@@ -62,7 +62,7 @@ void	char_to_binary(pid_t pid, char *str)
 			else
 				kill(pid, SIGUSR2);
 			bites--;
-			usleep(300);
+			usleep(320);
 		}
 		g_ready_flag = 0;
 		while (g_ready_flag == 1)

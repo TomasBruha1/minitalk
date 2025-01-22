@@ -25,7 +25,7 @@
 
 #include "minitalk.h"
 
-char	*g_msg = 0; // Could it be just a static? Why do I have global
+char	*g_msg; // Could it be just a static? Why do I have global
 
 // Handles SIGUSR1 and SIGUSR2 and get's client's PID via si_pid.
 void	handle_sigusrs(int signum, siginfo_t *info, void *context_t)
@@ -44,12 +44,13 @@ void	handle_sigusrs(int signum, siginfo_t *info, void *context_t)
 	i++;
 	if (i == 8)
 	{
+		// malloc here?
 		g_msg[j] = bites;
 		kill(client_pid, SIGUSR1);
 		if (bites == '\0') // set up separate function to save lines.
 		{
 			ft_printf("%s\n", g_msg); // Consider using write for g_msg.
-			ft_bzero(g_msg, sizeof(g_msg));
+			ft_bzero(g_msg, sizeof(1024));
 			bites = 0;
 			i = 0;
 			j = 0;
@@ -59,6 +60,11 @@ void	handle_sigusrs(int signum, siginfo_t *info, void *context_t)
 		}
 		bites = 0;
 		i = 0;
+		// next "if" is going to be separate function to realoc.
+		if (j == 1024)
+		{
+
+		}
 		j++;
 	}
 }
@@ -79,12 +85,13 @@ int	main(int argc, char **argv)
 		ft_printf("No arguments allowed\n");
 		return (EXIT_FAILURE);
 	}
-	g_msg = malloc(2048);
-	// if (!g_msg)
-	// {
-	// 	free(g_msg);
-	// 	EXIT_FAILURE;
-	// }
+	g_msg = malloc(1024);
+	if (!g_msg)
+	{
+		free(g_msg);
+		EXIT_FAILURE;
+	}
+	ft_bzero(g_msg, 1024);
 	sigaction(SIGUSR1, &sa, NULL);
 	sigaction(SIGUSR2, &sa, NULL);
 	ft_printf("Server PID is %d.\n", getpid());
