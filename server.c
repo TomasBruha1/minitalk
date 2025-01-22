@@ -11,14 +11,17 @@
 /* ************************************************************************** */
 
 // 💁👌🎍😍😊💙💜🖤
+// valgrind --leak-check=full ./server
 
 // DO NOW: below -> -> ->
 // realocate global on server to double and memcpy to another variable and back.
 // What about leaks? Free upon printing.
+// Set up separate print function in handler.
+// Set up handler that will free after SIGINT?
 
 // ERRORS
 // Client will sometimes print "OK", but will not shutdown.
-// Server stops printing after roughly 10th message.
+// Server stops printing after roughly 10th (now even less) message.
 
 #include "minitalk.h"
 
@@ -33,7 +36,7 @@ void	handle_sigusrs(int signum, siginfo_t *info, void *context_t)
 	static int	j;
 	pid_t		client_pid;
 	
-	client_pid = 0;
+	client_pid = 0; // shorten to just initialization?
 	if (client_pid == 0)
 		client_pid = info->si_pid;
 	if (signum == 12)
@@ -45,13 +48,13 @@ void	handle_sigusrs(int signum, siginfo_t *info, void *context_t)
 		kill(client_pid, SIGUSR1);
 		if (bites == '\0') // set up separate function to save lines.
 		{
-			ft_printf("%s\n\n", g_msg);
+			ft_printf("%s\n", g_msg); // Consider using write for g_msg.
 			ft_bzero(g_msg, sizeof(g_msg));
 			bites = 0;
 			i = 0;
 			j = 0;
 			kill(client_pid, SIGUSR2);
-			free(g_msg);
+		//	free(g_msg);
 			return;
 		}
 		bites = 0;
@@ -76,12 +79,12 @@ int	main(int argc, char **argv)
 		ft_printf("No arguments allowed\n");
 		return (EXIT_FAILURE);
 	}
-	g_msg = malloc(1024);
-	if (!g_msg)
-	{
-		free(g_msg);
-		EXIT_FAILURE;
-	}
+	g_msg = malloc(2048);
+	// if (!g_msg)
+	// {
+	// 	free(g_msg);
+	// 	EXIT_FAILURE;
+	// }
 	sigaction(SIGUSR1, &sa, NULL);
 	sigaction(SIGUSR2, &sa, NULL);
 	ft_printf("Server PID is %d.\n", getpid());
@@ -89,7 +92,7 @@ int	main(int argc, char **argv)
 	ft_printf("Run ./client with server PID and message to send as args.\n");
 	while (1)
 		pause();
-	write(1, "Not sure why it is here\n", 24);
+	write(1, "If you are seeing this, something is wrong!!\n", 45);
 	return (0);
 }
 

@@ -26,7 +26,7 @@ void	msg_ok_handler(int signum)
 {
 	if (signum == 12)
 	{
-		ft_printf("Message received!\n");
+		write(1, "Message received!\n", 18);
 		EXIT_SUCCESS;
 	}
 }
@@ -41,7 +41,7 @@ void	send_end(pid_t server_pid)
 	{
 		kill(server_pid, SIGUSR1);
 		count--;
-		usleep(150);
+		usleep(200);
 	}
 }
 
@@ -62,7 +62,7 @@ void	char_to_binary(pid_t pid, char *str)
 			else
 				kill(pid, SIGUSR2);
 			bites--;
-			usleep(175);
+			usleep(300);
 		}
 		g_ready_flag = 0;
 		while (g_ready_flag == 1)
