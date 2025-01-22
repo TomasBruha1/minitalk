@@ -41,7 +41,7 @@ void	send_end(pid_t server_pid)
 	{
 		kill(server_pid, SIGUSR1);
 		count--;
-		usleep(200);
+		usleep(700);
 	}
 }
 
@@ -62,11 +62,11 @@ void	char_to_binary(pid_t pid, char *str)
 			else
 				kill(pid, SIGUSR2);
 			bites--;
-			usleep(320);
+			usleep(750);
 		}
 		g_ready_flag = 0;
 		while (g_ready_flag == 1)
-			usleep(50);
+			usleep(100);
 		i++;
 	}
 	send_end(pid);
