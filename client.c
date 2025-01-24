@@ -6,7 +6,7 @@
 /*   By: tbruha <tbruha@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 17:57:40 by tbruha            #+#    #+#             */
-/*   Updated: 2024/12/07 00:13:46 by tbruha           ###   ########.fr       */
+/*   Updated: 2025/01/24 12:16:22 by tbruha           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	msg_ok_handler(int signum)
 	if (signum == 12)
 	{
 		write(1, "Message received!\n", 18);
-		EXIT_SUCCESS;
+		exit(EXIT_SUCCESS);
 	}
 }
 
@@ -40,13 +40,15 @@ void	send_end(pid_t server_pid)
 	while (count >= 0)
 	{
 		kill(server_pid, SIGUSR1);
+		write(1, "0\n", 2);
 		count--;
-		usleep(700);
+		usleep(200);
 	}
+	write(1, "\'0\\\' sent\n", 10);
 }
 
 // It converts the msg and send it via bits to server.
-void	char_to_binary(pid_t pid, char *str)
+void	send_msg(pid_t pid, char *str)
 {
 	int	bites;
 	int	i;
@@ -62,11 +64,11 @@ void	char_to_binary(pid_t pid, char *str)
 			else
 				kill(pid, SIGUSR2);
 			bites--;
-			usleep(750);
+			usleep(500);
 		}
 		g_ready_flag = 0;
 		while (g_ready_flag == 1)
-			usleep(100);
+			usleep(50);
 		i++;
 	}
 	send_end(pid);
@@ -88,7 +90,9 @@ int	main(int argc, char **argv)
 	signal(SIGUSR2, msg_ok_handler);
 	server_pid = ft_atoi(argv[1]);
 	str = argv[2];
-	char_to_binary(server_pid, str);
+	send_msg(server_pid, str);
+	write(1, "before pause\n", 13);
 	pause();
+	write(1, "after pause\n", 12);
 	return (EXIT_SUCCESS);
 }

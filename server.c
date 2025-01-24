@@ -6,14 +6,14 @@
 /*   By: tbruha <tbruha@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 17:57:26 by tbruha            #+#    #+#             */
-/*   Updated: 2025/01/22 21:27:46 by tbruha           ###   ########.fr       */
+/*   Updated: 2025/01/24 12:19:10 by tbruha           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // 💁👌🎍😍😊💙💜🖤
 // valgrind --leak-check=full ./server
 
-// DO NOW NOW: alloc_mgmt for double memory.
+// DO NOW NOW: alloc_mgmt for double memory. Double free or corruption somewhere??
 
 // DO NOW: below -> -> ->
 // realocate global on server to double and memcpy to another variable and back.
@@ -35,14 +35,18 @@ static char	*alloc_mgmt(int data_size, char *s_msg)
 	static int	buffer;
 	char 		*new_buffer;
 	
-	start_buffer = 1024;
+	start_buffer = 4;
+	ft_printf("data_size: %d\n\n", data_size);
 	if (s_msg == NULL)
 	{
+		write(1, "s_msg was NULL\n", 15);
 		s_msg = ft_calloc(1, start_buffer);
+		buffer = start_buffer;
 		return (s_msg);
 	}
-	else if (data_size > start_buffer)
+	else if (data_size >= buffer) // maybe buffer to start_buffer
 	{
+		write(1, "double alloc activated\n", 23);
 		new_buffer = ft_calloc(1, buffer * 2);
 		ft_memcpy(new_buffer, s_msg, buffer);
 		buffer = buffer * 2;
@@ -55,14 +59,14 @@ static char	*alloc_mgmt(int data_size, char *s_msg)
 // Handles SIGUSR1 and SIGUSR2 and get's client's PID via si_pid.
 void	handle_sigusrs(int signum, siginfo_t *info, void *context_t)
 {
-	static char	*s_msg; // Could it be just a static? Why do I have global
+	static char	*s_msg;
 	static int	bites;
 	static int	i;
 	static int	j;
 	pid_t		client_pid;
 
 	(void)context_t;
-	client_pid = 0; // shorten to just initialization?
+	client_pid = 0; // put it directly into kill ft
 	if (client_pid == 0)
 		client_pid = info->si_pid;
 	if (signum == 12)
@@ -70,28 +74,28 @@ void	handle_sigusrs(int signum, siginfo_t *info, void *context_t)
 	i++;
 	if (i == 8)
 	{
+		write(1, "test\n", 5);
 		s_msg = alloc_mgmt(j, s_msg);
-		// malloc function here and do re-aloc right away?
+		write(1, "test\n", 5);
 		s_msg[j] = bites;
+		write(1, "test\n", 5);
 		kill(client_pid, SIGUSR1);
+		write(1, "test\n", 5);
+		if (bites == '\0')
+			write(1, "nullbyte\n", 9);
 		if (bites == '\0') // set up separate function to save lines.
 		{
 			ft_printf("%s\n", s_msg); // Consider using write for g_msg.
-			ft_bzero(s_msg, sizeof(1024));
+			free(s_msg);
+			s_msg = NULL;
 			bites = 0;
 			i = 0;
 			j = 0;
 			kill(client_pid, SIGUSR2);
-		//	free(g_msg);
 			return ;
 		}
 		bites = 0;
 		i = 0;
-		// next "if" is going to be separate function to realoc.
-		// if (j == 1024)
-		// {
-
-		// }
 		j++;
 	}
 }
@@ -115,11 +119,10 @@ int	main(int argc, char **argv)
 	sigaction(SIGUSR1, &sa, NULL);
 	sigaction(SIGUSR2, &sa, NULL);
 	ft_printf("Server PID is %d.\n", getpid());
-	ft_printf("Waiting for message to print.\n\n");
-	ft_printf("Run ./client with server PID and message to send as args.\n");
+//	ft_printf("Waiting for message to print.\n\n");
+//	ft_printf("Run ./client with server PID and message to send as args.\n");
 	while (1)
 		pause();
-	write(1, "If you are seeing this, something is wrong!!\n", 45);
 	return (0);
 }
 
