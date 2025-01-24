@@ -6,7 +6,7 @@
 /*   By: tbruha <tbruha@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 17:57:40 by tbruha            #+#    #+#             */
-/*   Updated: 2025/01/24 14:49:56 by tbruha           ###   ########.fr       */
+/*   Updated: 2025/01/24 16:15:36 by tbruha           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,9 @@ void	send_end(pid_t server_pid)
 	{
 		kill(server_pid, SIGUSR1);
 		count--;
-		usleep(750);
+		usleep(450);
 	}
-	write(1, "\'0\\\' sent\n", 10);
+	usleep(200);
 }
 
 // It converts the msg and send it via bits to server.
@@ -63,11 +63,12 @@ void	send_msg(pid_t pid, char *str)
 			else
 				kill(pid, SIGUSR2);
 			bites--;
-			usleep(500);
+			usleep(350);
 		}
-		g_ready_flag = 0;
-		while (g_ready_flag == 1)
-			usleep(1000);
+		usleep(200);
+		// g_ready_flag = 0;
+		// while (g_ready_flag == 1)
+		// 	usleep(1000);
 		i++;
 	}
 	send_end(pid);
@@ -90,8 +91,6 @@ int	main(int argc, char **argv)
 	server_pid = ft_atoi(argv[1]);
 	str = argv[2];
 	send_msg(server_pid, str);
-	write(1, "before pause\n", 13);
 	pause();
-	write(1, "after pause\n", 12);
 	return (EXIT_SUCCESS);
 }

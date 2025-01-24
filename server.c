@@ -6,25 +6,17 @@
 /*   By: tbruha <tbruha@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 17:57:26 by tbruha            #+#    #+#             */
-/*   Updated: 2025/01/24 15:41:50 by tbruha           ###   ########.fr       */
+/*   Updated: 2025/01/24 16:07:35 by tbruha           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // 💁👌🎍😍😊💙💜🖤
 // valgrind --leak-check=full ./server
 
-// DO NOW NOW: alloc_mgmt for double memory. Double free or corruption somewhere??
-
 // DO NOW: below -> -> ->
 // realocate global on server to double and memcpy to another variable and back.
 // What about leaks? Free upon printing.
 // Set up separate print function in handler.
-// Set up handler that will free after SIGINT?
-// How do I need to rename my static variables?
-
-// ERRORS
-// Client will sometimes print "OK", but will not shutdown.
-// Server stops printing after roughly 10th (now even less) message.
 
 #include "minitalk.h"
 
@@ -44,7 +36,7 @@ static char	*alloc_mgmt(int data_size, char *s_msg)
 		buffer = start_buffer;
 		return (s_msg);
 	}
-	else if (data_size >= buffer) // maybe buffer to start_buffer
+	else if (data_size >= buffer)
 	{
 		write(1, "double alloc activated\n", 23);
 		new_buffer = ft_calloc(1, buffer * 2);
@@ -77,7 +69,6 @@ void	handle_sigusrs(int signum, siginfo_t *info, void *context_t)
 		s_msg = alloc_mgmt(j, s_msg);
 		s_msg[j] = bites;
 	//	kill(client_pid, SIGUSR1);
-		write(1, "nullbyte check next\n", 20);
 		if (bites == '\0') // set up separate function to save lines.
 		{
 			ft_printf("%s\n", s_msg); // Consider using write for g_msg.
