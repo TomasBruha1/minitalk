@@ -6,7 +6,7 @@
 /*   By: tbruha <tbruha@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 17:57:40 by tbruha            #+#    #+#             */
-/*   Updated: 2025/01/24 16:15:36 by tbruha           ###   ########.fr       */
+/*   Updated: 2025/01/24 16:25:22 by tbruha           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,9 @@ void	send_end(pid_t server_pid)
 	{
 		kill(server_pid, SIGUSR1);
 		count--;
-		usleep(450);
+		usleep(550);
 	}
-	usleep(200);
+//	usleep(200);
 }
 
 // It converts the msg and send it via bits to server.
@@ -65,7 +65,7 @@ void	send_msg(pid_t pid, char *str)
 			bites--;
 			usleep(350);
 		}
-		usleep(200);
+		usleep(100);
 		// g_ready_flag = 0;
 		// while (g_ready_flag == 1)
 		// 	usleep(1000);
