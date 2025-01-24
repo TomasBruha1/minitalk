@@ -6,7 +6,7 @@
 /*   By: tbruha <tbruha@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 17:57:26 by tbruha            #+#    #+#             */
-/*   Updated: 2025/01/24 12:19:10 by tbruha           ###   ########.fr       */
+/*   Updated: 2025/01/24 15:41:50 by tbruha           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,15 +74,10 @@ void	handle_sigusrs(int signum, siginfo_t *info, void *context_t)
 	i++;
 	if (i == 8)
 	{
-		write(1, "test\n", 5);
 		s_msg = alloc_mgmt(j, s_msg);
-		write(1, "test\n", 5);
 		s_msg[j] = bites;
-		write(1, "test\n", 5);
-		kill(client_pid, SIGUSR1);
-		write(1, "test\n", 5);
-		if (bites == '\0')
-			write(1, "nullbyte\n", 9);
+	//	kill(client_pid, SIGUSR1);
+		write(1, "nullbyte check next\n", 20);
 		if (bites == '\0') // set up separate function to save lines.
 		{
 			ft_printf("%s\n", s_msg); // Consider using write for g_msg.

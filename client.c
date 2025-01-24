@@ -6,7 +6,7 @@
 /*   By: tbruha <tbruha@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 17:57:40 by tbruha            #+#    #+#             */
-/*   Updated: 2025/01/24 12:16:22 by tbruha           ###   ########.fr       */
+/*   Updated: 2025/01/24 14:49:56 by tbruha           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,16 @@ sig_atomic_t	g_ready_flag;
 // Handler changes flag to 1 upon receiving SIGUSR1.
 void	flag_handler(int signum)
 {
-	if (signum == 10)
+	if (signum == SIGUSR1)
 		g_ready_flag = 1;
 }
 
 // Handler prints "message received" and exits once receives SIGUSR2.
 void	msg_ok_handler(int signum)
 {
-	if (signum == 12)
+	if (signum == SIGUSR2)
 	{
-		write(1, "Message received!\n", 18);
+		write(1, "OK!\n", 4);
 		exit(EXIT_SUCCESS);
 	}
 }
@@ -40,9 +40,8 @@ void	send_end(pid_t server_pid)
 	while (count >= 0)
 	{
 		kill(server_pid, SIGUSR1);
-		write(1, "0\n", 2);
 		count--;
-		usleep(200);
+		usleep(750);
 	}
 	write(1, "\'0\\\' sent\n", 10);
 }
@@ -68,7 +67,7 @@ void	send_msg(pid_t pid, char *str)
 		}
 		g_ready_flag = 0;
 		while (g_ready_flag == 1)
-			usleep(50);
+			usleep(1000);
 		i++;
 	}
 	send_end(pid);
