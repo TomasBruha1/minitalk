@@ -6,7 +6,7 @@
 /*   By: tbruha <tbruha@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 17:57:26 by tbruha            #+#    #+#             */
-/*   Updated: 2025/01/27 22:24:27 by tbruha           ###   ########.fr       */
+/*   Updated: 2025/01/28 00:49:09 by tbruha           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 // DO NOW: below -> -> ->
 // Set up separate print function in handler.
 // free upon SIGINT(wrapper). Free if not NULL will avoid double free.
+// How to check with valgrind?
 
 #include "minitalk.h"
 
@@ -26,11 +27,10 @@ static char	*alloc_mgmt(int data_size, char *s_msg)
 	static int	buffer;
 	char 		*new_buffer;
 	
-	start_buffer = 4;
-	ft_printf("data_size: %d\n\n", data_size);
+	start_buffer = 1024;
+	ft_printf("data_size: %d\n", data_size);
 	if (s_msg == NULL)
 	{
-		write(1, "s_msg was NULL\n", 15);
 		s_msg = ft_calloc(1, start_buffer);
 		buffer = start_buffer;
 		return (s_msg);
@@ -54,21 +54,16 @@ void	handle_sigusrs(int signum, siginfo_t *info, void *context_t)
 	static int	bites;
 	static int	i;
 	static int	j;
-	pid_t		client_pid;
 
 	(void)context_t;
-	client_pid = 0; // put it directly into kill ft, will it break it?
-	if (client_pid == 0)
-		client_pid = info->si_pid;
 	if (signum == SIGUSR2)
-		bites = bites | (128 >> i);
+		bites = bites | ((0x80) >> i); // save it directly to s_msg[j]
 	i++;
-	// kill back
+	kill(info->si_pid, SIGUSR1);
 	if (i == 8)
 	{
 		s_msg = alloc_mgmt(j, s_msg);
-		s_msg[j] = bites;
-	//	kill(client_pid, SIGUSR1);
+		s_msg[j] = bites; // 
 		if (bites == '\0') // separate function
 		{
 			ft_printf("%s\n", s_msg);
@@ -77,7 +72,7 @@ void	handle_sigusrs(int signum, siginfo_t *info, void *context_t)
 			bites = 0;
 			i = 0;
 			j = 0;
-			kill(client_pid, SIGUSR2);
+			kill(info->si_pid, SIGUSR2);
 			return ;
 		}
 		bites = 0;
@@ -105,11 +100,9 @@ int	main(int argc, char **argv)
 	sigaction(SIGUSR1, &sa, NULL);
 	sigaction(SIGUSR2, &sa, NULL);
 	ft_printf("Server PID is %d.\n", getpid());
-//	ft_printf("Waiting for message to print.\n\n");
-//	ft_printf("Run ./client with server PID and message to send as args.\n");
 	while (1)
 		pause();
-	return (0);
+	return (EXIT_SUCCESS);
 }
 
 // ----------------------------------------------------------------------------
