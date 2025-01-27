@@ -6,7 +6,7 @@
 /*   By: tbruha <tbruha@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 17:57:40 by tbruha            #+#    #+#             */
-/*   Updated: 2025/01/24 16:25:22 by tbruha           ###   ########.fr       */
+/*   Updated: 2025/01/27 22:31:34 by tbruha           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,9 @@ void	send_msg(pid_t pid, char *str)
 			usleep(350);
 		}
 		usleep(100);
-		// g_ready_flag = 0;
-		// while (g_ready_flag == 1)
-		// 	usleep(1000);
+		g_ready_flag = 0;
+		while (g_ready_flag == 1)
+			usleep(1000);
 		i++;
 	}
 	send_end(pid);

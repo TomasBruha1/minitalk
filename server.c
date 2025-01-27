@@ -6,7 +6,7 @@
 /*   By: tbruha <tbruha@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 17:57:26 by tbruha            #+#    #+#             */
-/*   Updated: 2025/01/24 16:07:35 by tbruha           ###   ########.fr       */
+/*   Updated: 2025/01/27 22:24:27 by tbruha           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,8 @@
 // valgrind --leak-check=full ./server
 
 // DO NOW: below -> -> ->
-// realocate global on server to double and memcpy to another variable and back.
-// What about leaks? Free upon printing.
 // Set up separate print function in handler.
+// free upon SIGINT(wrapper). Free if not NULL will avoid double free.
 
 #include "minitalk.h"
 
@@ -58,20 +57,21 @@ void	handle_sigusrs(int signum, siginfo_t *info, void *context_t)
 	pid_t		client_pid;
 
 	(void)context_t;
-	client_pid = 0; // put it directly into kill ft
+	client_pid = 0; // put it directly into kill ft, will it break it?
 	if (client_pid == 0)
 		client_pid = info->si_pid;
-	if (signum == 12)
+	if (signum == SIGUSR2)
 		bites = bites | (128 >> i);
 	i++;
+	// kill back
 	if (i == 8)
 	{
 		s_msg = alloc_mgmt(j, s_msg);
 		s_msg[j] = bites;
 	//	kill(client_pid, SIGUSR1);
-		if (bites == '\0') // set up separate function to save lines.
+		if (bites == '\0') // separate function
 		{
-			ft_printf("%s\n", s_msg); // Consider using write for g_msg.
+			ft_printf("%s\n", s_msg);
 			free(s_msg);
 			s_msg = NULL;
 			bites = 0;
@@ -114,6 +114,7 @@ int	main(int argc, char **argv)
 
 // ----------------------------------------------------------------------------
 
+// What about leaks? Free upon printing. // DONE
 // After printing final msg, reset msg with bzero so it can receive new one. // DONE
 // When '\0' is received, send SIGUSR2 to print confirmation at client. // DONE
 // When char is assembled, send SIGUSR1 to send another char. // DONE

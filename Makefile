@@ -6,7 +6,7 @@
 #    By: tbruha <tbruha@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/04 14:17:16 by tbruha            #+#    #+#              #
-#    Updated: 2024/12/06 12:01:03 by tbruha           ###   ########.fr        #
+#    Updated: 2025/01/27 21:18:31 by tbruha           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,10 +36,12 @@ $(NAME): $(OBJ_S) $(OBJ_C)
 server:	$(OBJ_S)
 	@make -C libft/
 	@$(CC) $(CFLAGS) $(OBJ_S) $(INCLUDE) -o server
+	@echo "server created"
 
 client: $(OBJ_C)
 	@make -C libft/
 	@$(CC) $(CFLAGS) $(OBJ_C) $(INCLUDE) -o client
+	@echo "client created"
 
 %.o: %.c
 	@$(CC) $(CFLAGS) -o $@ -c $<	
