@@ -6,7 +6,7 @@
 /*   By: tbruha <tbruha@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 17:57:26 by tbruha            #+#    #+#             */
-/*   Updated: 2025/01/28 00:49:09 by tbruha           ###   ########.fr       */
+/*   Updated: 2025/01/28 12:55:16 by tbruha           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 // Set up separate print function in handler.
 // free upon SIGINT(wrapper). Free if not NULL will avoid double free.
 // How to check with valgrind?
+// Setup check for wrong pid when sending from client. -1 check how?
+// handler on client side compress to just one instead of
 
 #include "minitalk.h"
 

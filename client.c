@@ -6,30 +6,35 @@
 /*   By: tbruha <tbruha@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 17:57:40 by tbruha            #+#    #+#             */
-/*   Updated: 2025/01/28 00:52:21 by tbruha           ###   ########.fr       */
+/*   Updated: 2025/01/28 13:45:08 by tbruha           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-sig_atomic_t	g_ready_flag; //check vs volatile
+sig_atomic_t	g_ready_flag;
 
 // Handler changes flag to 1 upon receiving SIGUSR1.
-void	flag_handler(int signum)
+void	sigusr_handler(int signum)
 {
 	if (signum == SIGUSR1)
 		g_ready_flag = 1;
-}
-
-// Handler prints "message received" and exits once receives SIGUSR2.
-void	msg_ok_handler(int signum)
-{
-	if (signum == SIGUSR2)
+	else if (signum == SIGUSR2)
 	{
 		write(1, "OK!\n", 4);
 		exit(EXIT_SUCCESS);
 	}
 }
+
+// Handler prints "message received" and exits once receives SIGUSR2.
+// void	msg_ok_handler(int signum)
+// {
+// 	if (signum == SIGUSR2)
+// 	{
+// 		write(1, "OK!\n", 4);
+// 		exit(EXIT_SUCCESS);
+// 	}
+// }
 
 // It sends the last char so server knows the message is over and sends Ok back
 void	send_byte(pid_t server_pid, char c)
@@ -78,8 +83,8 @@ int	main(int argc, char **argv)
 		ft_printf("Write server's PID and message to send next time. BYE\n");
 		return (EXIT_FAILURE);
 	}
-	signal(SIGUSR1, flag_handler);
-	signal(SIGUSR2, msg_ok_handler);
+	signal(SIGUSR1, sigusr_handler);
+	signal(SIGUSR2, sigusr_handler);
 	server_pid = ft_atoi(argv[1]);
 	str = argv[2];
 	send_msg(server_pid, str);
