@@ -6,7 +6,7 @@
 /*   By: tbruha <tbruha@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 17:57:26 by tbruha            #+#    #+#             */
-/*   Updated: 2025/01/28 14:28:48 by tbruha           ###   ########.fr       */
+/*   Updated: 2025/01/28 14:31:12 by tbruha           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ static char	*alloc_mgmt(int data_size, char *s_msg)
 {
 	int			start_buffer;
 	static int	buffer;
-	char 		*new_buffer;
-	
+	char		*new_buffer;
+
 	start_buffer = 1024;
 	if (s_msg == NULL)
 	{
@@ -39,7 +39,7 @@ static char	*alloc_mgmt(int data_size, char *s_msg)
 		buffer = buffer * 2;
 		free(s_msg);
 		return (new_buffer);
-	}	
+	}
 	return (s_msg);
 }
 
@@ -53,14 +53,14 @@ void	handle_sigusrs(int signum, siginfo_t *info, void *context_t)
 
 	(void)context_t;
 	if (signum == SIGUSR2)
-		bites = bites | ((0x80) >> i); // save it directly to s_msg[j]
+		bites = bites | ((0x80) >> i);
 	i++;
 	kill(info->si_pid, SIGUSR1);
 	if (i == 8)
 	{
 		s_msg = alloc_mgmt(j, s_msg);
-		s_msg[j] = bites; // 
-		if (bites == '\0') // separate function
+		s_msg[j] = bites;
+		if (bites == '\0')
 		{
 			ft_printf("%s\n", s_msg);
 			free(s_msg);
@@ -77,12 +77,10 @@ void	handle_sigusrs(int signum, siginfo_t *info, void *context_t)
 	}
 }
 
-// Prints out it's PID and waits for msg. Then prints it char by char now.
-// After receiving the entire message it will send SIGUSR1 back as confirmation
-// I will do it char by char now and switch to full message later. UNI should work.
+// Prints out it's PID, setups sigaction struct and wait for msg.
 int	main(int argc, char **argv)
 {
-	struct sigaction 	sa;
+	struct sigaction	sa;
 
 	sa.sa_sigaction = handle_sigusrs;
 	sigemptyset(&sa.sa_mask);
@@ -108,7 +106,6 @@ int	main(int argc, char **argv)
 // How to check with valgrind? // DONE
 // handler on client side compress to just one instead of two // DONE
 // What about leaks? Free upon printing. // DONE
-// After printing final msg, reset msg with bzero so it can receive new one. // DONE
 // When '\0' is received, send SIGUSR2 to print confirmation at client. // DONE
 // When char is assembled, send SIGUSR1 to send another char. // DONE
 // Set up flag for sending another char and usleep for lower. // DONE
