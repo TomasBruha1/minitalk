@@ -6,7 +6,7 @@
 /*   By: tbruha <tbruha@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 17:57:40 by tbruha            #+#    #+#             */
-/*   Updated: 2025/01/28 14:27:44 by tbruha           ###   ########.fr       */
+/*   Updated: 2025/01/28 14:52:16 by tbruha           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	sigusr_handler(int signum)
 void	send_byte(pid_t server_pid, char c)
 {
 	int	bites;
-	
+
 	bites = 7;
 	while (bites >= 0)
 	{
@@ -40,14 +40,16 @@ void	send_byte(pid_t server_pid, char c)
 			{
 				ft_printf("Signal NOT sent, error.\n");
 				exit(EXIT_FAILURE);
-			}	
+			}
 		}
 		else
+		{
 			if (kill(server_pid, SIGUSR2) == -1)
 			{
 				ft_printf("Signal NOT sent, error.\n");
 				exit(EXIT_FAILURE);
-			}	
+			}
+		}
 		bites--;
 		while (g_ready_flag == 0)
 			pause();

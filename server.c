@@ -6,7 +6,7 @@
 /*   By: tbruha <tbruha@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 17:57:26 by tbruha            #+#    #+#             */
-/*   Updated: 2025/01/28 14:31:12 by tbruha           ###   ########.fr       */
+/*   Updated: 2025/01/28 14:50:43 by tbruha           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,15 @@ static char	*alloc_mgmt(int data_size, char *s_msg)
 	return (s_msg);
 }
 
+void	msg_end(char **msg, int pid, int *bites)
+{
+	ft_printf("%s\n", *msg);
+	free(*msg);
+	*msg = NULL;
+	bites = 0;
+	kill(pid, SIGUSR2);
+}
+
 // Handles SIGUSR1 and SIGUSR2 and get's client's PID via si_pid.
 void	handle_sigusrs(int signum, siginfo_t *info, void *context_t)
 {
@@ -62,13 +71,9 @@ void	handle_sigusrs(int signum, siginfo_t *info, void *context_t)
 		s_msg[j] = bites;
 		if (bites == '\0')
 		{
-			ft_printf("%s\n", s_msg);
-			free(s_msg);
-			s_msg = NULL;
-			bites = 0;
+			msg_end(&s_msg, info->si_pid, &bites);
 			i = 0;
 			j = 0;
-			kill(info->si_pid, SIGUSR2);
 			return ;
 		}
 		bites = 0;
