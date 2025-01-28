@@ -6,7 +6,7 @@
 #    By: tbruha <tbruha@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/04 14:17:16 by tbruha            #+#    #+#              #
-#    Updated: 2025/01/27 21:18:31 by tbruha           ###   ########.fr        #
+#    Updated: 2025/01/28 18:22:24 by tbruha           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,7 +42,7 @@ client: $(OBJ_C)
 	@make -C libft/
 	@$(CC) $(CFLAGS) $(OBJ_C) $(INCLUDE) -o client
 	@echo "client created"
-
+	
 %.o: %.c
 	@$(CC) $(CFLAGS) -o $@ -c $<	
 

@@ -6,20 +6,14 @@
 /*   By: tbruha <tbruha@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 17:57:26 by tbruha            #+#    #+#             */
-/*   Updated: 2025/01/28 14:50:43 by tbruha           ###   ########.fr       */
+/*   Updated: 2025/01/28 18:09:53 by tbruha           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-// 💁👌🎍😍😊💙💜🖤
-// valgrind --leak-check=full ./server
-
-// DO NOW: below -> -> ->
-// Set up separate print function in handler.
 
 #include "minitalk.h"
 
 // If empty it allocates s_msg, if data_size is bigger it doubles the memory.
-static char	*alloc_mgmt(int data_size, char *s_msg)
+char	*alloc_mgmt(int data_size, char *s_msg)
 {
 	int			start_buffer;
 	static int	buffer;
@@ -43,6 +37,8 @@ static char	*alloc_mgmt(int data_size, char *s_msg)
 	return (s_msg);
 }
 
+// Once the '\0' byte is received it will print the whole msg and prepare
+// the variables for next msg to be received.
 void	msg_end(char **msg, int pid, int *bites)
 {
 	ft_printf("%s\n", *msg);
@@ -62,7 +58,7 @@ void	handle_sigusrs(int signum, siginfo_t *info, void *context_t)
 
 	(void)context_t;
 	if (signum == SIGUSR2)
-		bites = bites | ((0x80) >> i);
+		bites |= ((0x80) >> i);
 	i++;
 	kill(info->si_pid, SIGUSR1);
 	if (i == 8)
@@ -104,24 +100,9 @@ int	main(int argc, char **argv)
 	return (EXIT_SUCCESS);
 }
 
-// ----------------------------------------------------------------------------
+// 💁👌🎍😍😊💙💜🖤
+// valgrind --leak-check=full ./server
 
-// Setup check for wrong pid when sending from client. -1 check how? // DONE
-// free upon SIGINT(wrapper). Not needed // DONE
-// How to check with valgrind? // DONE
-// handler on client side compress to just one instead of two // DONE
-// What about leaks? Free upon printing. // DONE
-// When '\0' is received, send SIGUSR2 to print confirmation at client. // DONE
-// When char is assembled, send SIGUSR1 to send another char. // DONE
-// Set up flag for sending another char and usleep for lower. // DONE
-// Change signal to sigaction and get clients PID. // DONE
-// Client's PID -> sigaction siginfo_t si_pid // DONE
-// Emojis are working now. // DONE
-// NOW: print stuff char by char on server side, check if condition. // DONE
-// It receives multiple messages from different terminals. // DONE
-// static for 8 bits, when 8 assemble char and add it to str[i] // DONE
-// get PID and print PID upon start // DONE
-// message "running and waiting for something to print" + while (1) // DONE
-// unused argv -> (void)argv // DONE
-// get message length via strlen. // DONE
-// send the int len to server, char by char // DONE
+// DO NOW: below -> -> ->
+// minitalk.h
+// copy it to vogosphere
