@@ -6,7 +6,7 @@
 /*   By: tbruha <tbruha@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 17:57:40 by tbruha            #+#    #+#             */
-/*   Updated: 2025/01/28 13:45:08 by tbruha           ###   ########.fr       */
+/*   Updated: 2025/01/28 14:27:44 by tbruha           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 sig_atomic_t	g_ready_flag;
 
-// Handler changes flag to 1 upon receiving SIGUSR1.
+// Handler changes flag if SIGUSR1 and prints OK if SIGUSR2.
 void	sigusr_handler(int signum)
 {
 	if (signum == SIGUSR1)
@@ -26,17 +26,7 @@ void	sigusr_handler(int signum)
 	}
 }
 
-// Handler prints "message received" and exits once receives SIGUSR2.
-// void	msg_ok_handler(int signum)
-// {
-// 	if (signum == SIGUSR2)
-// 	{
-// 		write(1, "OK!\n", 4);
-// 		exit(EXIT_SUCCESS);
-// 	}
-// }
-
-// It sends the last char so server knows the message is over and sends Ok back
+// It sends each char as 8 bits using SIGUSR1 and SIGUSR2.
 void	send_byte(pid_t server_pid, char c)
 {
 	int	bites;
@@ -45,19 +35,28 @@ void	send_byte(pid_t server_pid, char c)
 	while (bites >= 0)
 	{
 		if (((c >> bites) & 1) == 0)
-			kill(server_pid, SIGUSR1);
+		{
+			if (kill(server_pid, SIGUSR1) == -1)
+			{
+				ft_printf("Signal NOT sent, error.\n");
+				exit(EXIT_FAILURE);
+			}	
+		}
 		else
-			kill(server_pid, SIGUSR2);
+			if (kill(server_pid, SIGUSR2) == -1)
+			{
+				ft_printf("Signal NOT sent, error.\n");
+				exit(EXIT_FAILURE);
+			}	
 		bites--;
 		while (g_ready_flag == 0)
 			pause();
 		g_ready_flag = 0;
-		usleep(1);
 	}
-	usleep(100);
+	usleep(50);
 }
 
-// It sends message to send_byte to send it via '0' and '1' then '\0'.
+// 
 void	send_msg(pid_t pid, char *str) // fork to anothehr ft "send byte"
 {
 	int	i;
@@ -68,6 +67,7 @@ void	send_msg(pid_t pid, char *str) // fork to anothehr ft "send byte"
 		send_byte(pid, str[i]);
 		i++;
 	}
+	usleep(100);
 	send_byte(pid, '\0');
 }
 

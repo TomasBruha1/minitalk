@@ -6,7 +6,7 @@
 /*   By: tbruha <tbruha@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 17:57:26 by tbruha            #+#    #+#             */
-/*   Updated: 2025/01/28 12:55:16 by tbruha           ###   ########.fr       */
+/*   Updated: 2025/01/28 14:28:48 by tbruha           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,6 @@
 
 // DO NOW: below -> -> ->
 // Set up separate print function in handler.
-// free upon SIGINT(wrapper). Free if not NULL will avoid double free.
-// How to check with valgrind?
-// Setup check for wrong pid when sending from client. -1 check how?
-// handler on client side compress to just one instead of
 
 #include "minitalk.h"
 
@@ -30,7 +26,6 @@ static char	*alloc_mgmt(int data_size, char *s_msg)
 	char 		*new_buffer;
 	
 	start_buffer = 1024;
-	ft_printf("data_size: %d\n", data_size);
 	if (s_msg == NULL)
 	{
 		s_msg = ft_calloc(1, start_buffer);
@@ -39,7 +34,6 @@ static char	*alloc_mgmt(int data_size, char *s_msg)
 	}
 	else if (data_size >= buffer)
 	{
-		write(1, "double alloc activated\n", 23);
 		new_buffer = ft_calloc(1, buffer * 2);
 		ft_memcpy(new_buffer, s_msg, buffer);
 		buffer = buffer * 2;
@@ -109,6 +103,10 @@ int	main(int argc, char **argv)
 
 // ----------------------------------------------------------------------------
 
+// Setup check for wrong pid when sending from client. -1 check how? // DONE
+// free upon SIGINT(wrapper). Not needed // DONE
+// How to check with valgrind? // DONE
+// handler on client side compress to just one instead of two // DONE
 // What about leaks? Free upon printing. // DONE
 // After printing final msg, reset msg with bzero so it can receive new one. // DONE
 // When '\0' is received, send SIGUSR2 to print confirmation at client. // DONE
