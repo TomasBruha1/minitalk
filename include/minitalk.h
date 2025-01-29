@@ -6,7 +6,7 @@
 /*   By: tbruha <tbruha@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 17:18:04 by tbruha            #+#    #+#             */
-/*   Updated: 2025/01/28 18:09:40 by tbruha           ###   ########.fr       */
+/*   Updated: 2025/01/29 14:08:55 by tbruha           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ char	*alloc_mgmt(int data_size, char *s_msg);
 
 void	send_msg(pid_t pid, char *str);
 void	send_byte(pid_t server_pid, char c);
+void    send_sig(int signum, pid_t pid);
 void	sigusr_handler(int signum);
 
 // HELPER >> DELETE LATER
