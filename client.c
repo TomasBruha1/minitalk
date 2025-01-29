@@ -6,13 +6,22 @@
 /*   By: tbruha <tbruha@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 17:57:40 by tbruha            #+#    #+#             */
-/*   Updated: 2025/01/28 17:41:13 by tbruha           ###   ########.fr       */
+/*   Updated: 2025/01/29 13:51:41 by tbruha           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
 sig_atomic_t	g_ready_flag;
+
+void	send_sig(int signum, pid_t pid)
+{
+	if (kill(pid, signum) == -1)
+	{
+		write(1, "Signal failed to send !\n", 23);
+		exit(EXIT_FAILURE);
+	}
+}
 
 // Handler changes flag if SIGUSR1 and prints OK if SIGUSR2.
 void	sigusr_handler(int signum)
@@ -35,9 +44,9 @@ void	send_byte(pid_t server_pid, char c)
 	while (bites >= 0)
 	{
 		if (((c >> bites) & 1) == 0)
-			kill(server_pid, SIGUSR1);
+			send_sig(SIGUSR1, server_pid);
 		else
-			kill(server_pid, SIGUSR2);
+			send_sig(SIGUSR1, server_pid);
 		bites--;
 		while (g_ready_flag == 0)
 			pause();

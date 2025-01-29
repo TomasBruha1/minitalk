@@ -6,7 +6,7 @@
 /*   By: tbruha <tbruha@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 17:57:26 by tbruha            #+#    #+#             */
-/*   Updated: 2025/01/28 18:09:53 by tbruha           ###   ########.fr       */
+/*   Updated: 2025/01/29 13:52:23 by tbruha           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,10 +99,3 @@ int	main(int argc, char **argv)
 		pause();
 	return (EXIT_SUCCESS);
 }
-
-// 💁👌🎍😍😊💙💜🖤
-// valgrind --leak-check=full ./server
-
-// DO NOW: below -> -> ->
-// minitalk.h
-// copy it to vogosphere
